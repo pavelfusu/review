@@ -62,6 +62,11 @@ public class HashMap<K, V> implements Map<K, V> {
 		addEntry(hash, argKey, argValue, i);
 		return null;
 	}
+	
+	@Override
+	public int size() {
+		return size;
+	}
 
 	void addEntry(int argHash, K argKey, V argValue, int argIndex) {
 		if (size >= threshold && buckets[argIndex] != null) {
@@ -154,6 +159,5 @@ public class HashMap<K, V> implements Map<K, V> {
 		}
 
 	}
-
 
 }
