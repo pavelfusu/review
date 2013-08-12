@@ -15,7 +15,4 @@ public class Node<V> {
 		return data.toString();
 	}
 	
-	public boolean equals(Node<V> other) {
-		return data.equals(other.data);
-	}
 }

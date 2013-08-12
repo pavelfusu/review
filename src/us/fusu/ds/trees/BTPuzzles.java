@@ -10,7 +10,7 @@ public class BTPuzzles {
 	
 	public static <V> Node<V> lowestCommonAncestor(Node<V> root, Node<V> a, Node<V> b) {
 		if (root == null) return null;
-		if (root.equals(a) || root.equals(b)) {
+		if (root.data.equals(a.data) || root.data.equals(b.data)) {
 			return root;
 		}
 
@@ -28,7 +28,7 @@ public class BTPuzzles {
 		if (root == null) {
 			return;
 		}
-		if (root.equals(a) || root.equals(b)) {
+		if (root.data.equals(a.data) || root.data.equals(b.data)) {
 			outputPath.push(root);
 			return;
 		}
@@ -48,7 +48,7 @@ public class BTPuzzles {
 		
 		Node<V> lca = lowestCommonAncestor(root, a, b);
 		
-		Node<V> r = lca.equals(a) ? a : (lca.equals(b) ? b : lca);
+		Node<V> r = lca.data.equals(a.data) ? a : (lca.data.equals(b.data) ? b : lca);
 		
 		shortestpath(r.left, a, b, path1);
 		shortestpath(r.right, a, b, path2);
@@ -113,7 +113,7 @@ public class BTPuzzles {
 			}
 		}
 		
-		return (root1 == root2 || root1.equals(root2)) && equals(root1.left, root2.left) && equals(root1.right, root2.right);
+		return (root1 == root2 || root1.data.equals(root2.data)) && equals(root1.left, root2.left) && equals(root1.right, root2.right);
 	}
 	
 	public static <V> boolean equalsIterative(Node<V> root1, Node<V> root2) {
@@ -126,7 +126,7 @@ public class BTPuzzles {
 				return false;
 			}
 			
-			if (root1 != root2 && !root1.equals(root2)) {
+			if (root1 != root2 && !root1.data.equals(root2.data)) {
 				return false;
 			}
 			
