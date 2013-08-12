@@ -103,4 +103,49 @@ public class BTPuzzles {
 			IO.write(rightSide.pop().data + " ");
 		}
 	}
+	
+	public static <V> boolean equals(Node<V> root1, Node<V> root2) {
+		if (root1 == null || root2 == null) {
+			if (root1 == null && root2 == null) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
+		return (root1 == root2 || root1.equals(root2)) && equals(root1.left, root2.left) && equals(root1.right, root2.right);
+	}
+	
+	public static <V> boolean equalsIterative(Node<V> root1, Node<V> root2) {
+		Stack<Node<V>> stack1 = new Stack<>();
+		Stack<Node<V>> stack2 = new Stack<>();
+		
+		while (!stack1.isEmpty() || !stack2.isEmpty() || root1 != null || root2 != null) {
+			
+			if ((root1 == null && root2 != null) || (root1 != null && root2 == null)) {
+				return false;
+			}
+			
+			if (root1 != root2 && !root1.equals(root2)) {
+				return false;
+			}
+			
+			if (stack1.size() != stack2.size()) {
+				return false;
+			}
+			
+			if (root1 != null && root2 != null) {
+				stack1.push(root1);
+				stack2.push(root2);
+				root1 = root1.left;
+				root2 = root2.left;
+			} else {
+				root1 = stack1.pop().right;
+				root2 = stack2.pop().right;
+			}
+		}
+		
+		return true;
+	}
+	
 }
