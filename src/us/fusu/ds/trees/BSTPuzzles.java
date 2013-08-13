@@ -2,8 +2,12 @@ package us.fusu.ds.trees;
 
 import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import us.fusu.ds.trees.binary.Node;
+import us.fusu.ds.trees.binary.traversals.BinaryTreeTraversal;
+import us.fusu.ds.trees.binary.traversals.TraversalType;
+import us.fusu.io.IO;
 
 public class BSTPuzzles {
 	
@@ -112,5 +116,41 @@ public class BSTPuzzles {
 				return false;
 		}
 		return true;
+	}
+	
+	public static Node<Integer> binaryPreorderToTree(int[] arr, int length, AtomicInteger index, int min, int max) {
+		if (index.intValue() >= length) {
+			return null;
+		}
+
+		Node<Integer> root = null;
+
+		int currentNode = arr[index.intValue()];
+		
+		if (currentNode > min && currentNode < max) {
+			root = new Node<>(currentNode);
+			index.incrementAndGet();
+
+			if (index.intValue() < length ) {
+				root.left = binaryPreorderToTree(arr, length, index, min, currentNode);
+			}
+
+			if (index.intValue() < length) {
+				root.right = binaryPreorderToTree(arr, length, index, currentNode, max);
+			}
+		}
+
+		return root;
+	}
+	
+	public static void main(String[] args) {
+		Node<Integer> root = binaryPreorderToTree(new int[] {60, 41, 16, 25, 53, 46, 42, 55, 74, 65, 63, 62, 64, 70}, 14, new AtomicInteger(0), Integer.MIN_VALUE, Integer.MAX_VALUE);
+		BinaryTreeTraversal.traverse(root, TraversalType.IN_ORDER, new BinaryTreeTraversal.NodeOperation<Integer>() {
+
+			@Override
+			public void visit(Integer argValue) {
+				IO.write(argValue + " ");
+			}
+		});
 	}
 }

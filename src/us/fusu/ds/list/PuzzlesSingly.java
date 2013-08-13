@@ -38,6 +38,37 @@ public class PuzzlesSingly {
 		return reverseRecursive(argHead, null);
 	}
 	
+	public static <V extends Comparable<V>> Node<V> mergeSortedLists(Node<V> root1, Node<V> root2) {
+		Node<V> root = null;
+		Node<V> current = null;
+		
+		while (root1 != null && root2 != null) {
+			Node<V> next = root1.data.compareTo(root2.data) < 0 ? root1 : root2;
+			
+			if (root == null) {
+				root = next;
+				current = next;
+			} else {
+				current.next = next;
+				current = current.next;
+			}
+			
+			if (next == root1) {
+				root1 = root1.next;
+			} else {
+				root2 = root2.next;
+			}
+		}
+		
+		if (root1 != null) {
+			current.next = root1;
+		} else if (root2 != null) {
+			current.next = root2;
+		}
+		
+		return root;
+	}
+	
 	public static <V> Node<V> asList(V[] arr) {
 		Node<V> head = new Node<>(arr[0]);
 		Node<V> current = head;
@@ -59,9 +90,17 @@ public class PuzzlesSingly {
 	}
 
 	public static void main(String[] args) {
-		Node<Integer> head = asList(new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
-		print(head);
-		head = reverseRecursive(head);
-		print(head);
+//		Node<Integer> head = asList(new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+//		print(head);
+//		head = reverseRecursive(head);
+//		print(head);
+		
+		Node<Integer> l1 = asList(new Integer[] {6, 8, 12, 15, 20, 22});
+		Node<Integer> l2 = asList(new Integer[] {1, 3, 5, 7, 13, 16, 17, 21, 23});
+		
+		print(l1);
+		print(l2);
+		
+		print(mergeSortedLists(l1, l2));
 	}
 }
