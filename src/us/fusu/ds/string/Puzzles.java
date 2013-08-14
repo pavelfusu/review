@@ -75,11 +75,40 @@ public class Puzzles {
 		return false;
 	}
 	
+	private static String expandAroundCenter(String s, int c1, int c2) {
+		  int l = c1, r = c2;
+		  int n = s.length();
+		  while (l >= 0 && r <= n-1 && s.charAt(l) == s.charAt(r)) {
+		    l--;
+		    r++;
+		  }
+		  
+		  return (l + 1 <= r) ? s.substring(l + 1, r) : "";
+		}
+		 
+		public static String longestPalindromeSimple(String s) {
+		  int n = s.length();
+		  if (n == 0) return "";
+		  String longest = s.substring(0, 1);  // a single char itself is a palindrome
+		  for (int i = 0; i < n-1; i++) {
+		    String p1 = expandAroundCenter(s, i, i);
+		    if (p1.length() > longest.length())
+		      longest = p1;
+		 
+		    String p2 = expandAroundCenter(s, i, i+1);
+		    if (p2.length() > longest.length())
+		      longest = p2;
+		  }
+		  return longest;
+		}
+	
+	
 	public static void main(String[] args) {
 //		String str = "My hat is round";
 //		char[] chars = new char[str.length()]; 
 //		str.getChars(0, str.length(), chars, 0);
 //		IO.writeLn(reverseWords(chars));
-		permutation("abra");
+//		permutation("abra");
+		System.out.println("Longest palindrome of abacdfgdcaba is " + longestPalindromeSimple("abacdfdcgdcaba")); // this doesn't work
 	}
 }

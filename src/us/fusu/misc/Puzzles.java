@@ -1,7 +1,7 @@
 package us.fusu.misc;
 
 public class Puzzles {
-	
+
 	/* 
 	 * F(2n) = F(n) * (2*F(n+1) - F(n))
 	 * F(2n+1) = F(n+1)^2 + F(n)^2
@@ -24,6 +24,38 @@ public class Puzzles {
 			}
 		}
 		return a;
+	}
+
+	public static boolean isPalindrome(int x) {
+		if (x < 0) return false;
+		int div = 1;
+		while (x / div >= 10) {
+			div *= 10;
+		}        
+		while (x != 0) {
+			int l = x / div;
+			int r = x % 10;
+			if (l != r) return false;
+			x = (x % div) / 10;
+			div /= 100;
+		}
+		return true;
+	}
+
+
+	public static boolean isPalindromeRecursive(int x, int y) {
+		if (x < 0) return false;
+		if (x == 0) return true;
+		if (isPalindromeRecursive(x/10, y) && (x%10 == y%10)) {
+			y /= 10;
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public static boolean isPalindromeRecursive(int x) {
+		return isPalindromeRecursive(x, x);
 	}
 
 	public static void main(String[] args) {

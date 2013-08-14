@@ -5,7 +5,7 @@ import java.util.Arrays;
 import us.fusu.io.IO;
 
 public class Puzzles {
-	
+
 	public static void processSubsets(int[] set, int k) {
 		int[] subset = new int[k];
 		processLargerSubsets(set, subset, 0, 0);
@@ -34,7 +34,7 @@ public class Puzzles {
 			IO.writeLn();
 		}
 	}
-	
+
 	public static int[] convertLessMore(int[] a, int n) {
 		boolean less = true;
 
@@ -127,7 +127,7 @@ public class Puzzles {
 
 		return -1;
 	}
-	
+
 	public static int binarySearchRotated(int val, int[] arr) {
 		if (arr == null || arr.length == 0) {
 			return -1;
@@ -168,7 +168,7 @@ public class Puzzles {
 
 		return true;
 	}
-	
+
 	// find the sequence that sum up to the maximum sum
 	public static int maxSum(int[] arr) {
 		if (arr == null || arr.length == 0) {
@@ -198,7 +198,7 @@ public class Puzzles {
 		}
 		return max;
 	}
-	
+
 	public static int maxCoin(int[] coin, int start, int end) {
 		if (start > end) {
 			return 0;
@@ -209,12 +209,12 @@ public class Puzzles {
 
 		return Math.max(a,b);
 	}
-	
+
 	public static void printArrayIntersection(int[] a1, int[] a2) {
 		int i = 0; int j = 0;
 		int n1 = a1.length;
 		int n2 = a2.length;
-		
+
 		while (i < n1 && j < n2) {
 			if (a1[i] == a2[j]) {
 				IO.writeLn(a1[i] + " ");
@@ -227,7 +227,7 @@ public class Puzzles {
 			}
 		}
 	}
-	
+
 	public static boolean isSymmetric(int[][] a, int m, int n) {
 		for(int i = 0;i < m;i ++) { 
 			for(int j = 0; j< n; j++) { 
@@ -238,25 +238,107 @@ public class Puzzles {
 		} 
 		return true;
 	}
-	
-	public static void main(String[] args) {
-		int a[][] = new int[][] 
-				{{1, 2, 3},
-				{4, 5, 6},
-				{7, 8, 9}};
 
-		int b[][] = new int[][] 
-				{{9, 8, 7},
-				{6, 5, 4},
-				{3, 2, 1}};
-		
-		int c[][] = new int[][] 
-				{{9, 8, 7},
-				{4, 5, 4},
-				{7, 8, 9}};
-		
-		System.out.println(isSymmetric(a, 3, 3));
-		System.out.println(isSymmetric(b, 3, 3));
-		System.out.println(isSymmetric(c, 3, 3));
+	public static int partition( int[] array, int first, int last) {
+		int pivot = array[first];
+		int pivotPosition = first;
+		first++;
+		while ( first <= last ) {
+			// scan right
+			while ( ( first <= last ) && (array[first] < pivot)) {
+				first++;
+			}
+
+			// scan left
+			while ( ( last >= first ) && (array[last] >= pivot)) {
+				last--;
+			}
+
+			if ( first > last ) {
+				swap( array, pivotPosition, last );
+			}
+			else {
+				swap( array, first, last );
+			}
+		}
+		return last;
+	}
+
+	private static int orderStatistic(int[] array, int k, int first, int last) {
+		int pivotPosition = partition(array, first, last);
+		if ( pivotPosition == k - 1) {
+			return array[k - 1];
+		}
+		if (k - 1 < pivotPosition ) {
+			return orderStatistic(array, k, first, pivotPosition - 1);
+		}
+		else {
+			return orderStatistic(array, k, pivotPosition + 1, last);
+		}
+	}
+
+	public static int kthSmallest(int[] array, int k) {
+		return orderStatistic(array, k, 0, array.length - 1);
+	}
+
+	public static int kthLargest(int[] array, int k) {
+		return orderStatistic(array, array.length - k + 1, 0, array.length - 1);
+	}
+
+	// iterative version
+	public static int orderStatisticIterative(
+			int[] array, int k, int first, int last) {
+
+		int pivotPosition = partition(array, first, last);
+
+		while (pivotPosition != k - 1) {
+			if (k - 1 < pivotPosition) {
+				last = pivotPosition - 1;
+			}
+			else {
+				first = pivotPosition + 1;
+			}
+
+			pivotPosition = partition(array, first, last);
+		}
+
+		return array[k - 1];
+	}
+
+	public static void main(String[] args) {
+		//		int a[][] = new int[][] 
+		//				{{1, 2, 3},
+		//				{4, 5, 6},
+		//				{7, 8, 9}};
+		//
+		//		int b[][] = new int[][] 
+		//				{{9, 8, 7},
+		//				{6, 5, 4},
+		//				{3, 2, 1}};
+		//
+		//		int c[][] = new int[][] 
+		//				{{9, 8, 7},
+		//				{4, 5, 4},
+		//				{7, 8, 9}};
+		//
+		//		System.out.println(isSymmetric(a, 3, 3));
+		//		System.out.println(isSymmetric(b, 3, 3));
+		//		System.out.println(isSymmetric(c, 3, 3));
+
+		int[] array = { 42, 92, 31, 73, 46, 11, 29, 53, 64, 4 };
+
+		System.out.println( "The array elements: " );
+		for ( int i = 0; i < array.length; i++ )
+			System.out.print( "  " + array[i] );
+
+		System.out.println( "\n" );
+		System.out.println( "1st smallest value is: " +
+				kthSmallest(array, 1));
+		System.out.println( "4th smallest value is: " +
+				kthSmallest(array, 4) );
+		System.out.println( "7th smallest value is: " +
+				kthSmallest(array, 7) );
+		System.out.println( "10th smallest value is: " +
+				kthSmallest(array, 10) );
 	}
 }
