@@ -148,4 +148,51 @@ public class BTPuzzles {
 		return true;
 	}
 	
+	public static <V> int height(Node<V> argRoot) {
+		if (argRoot == null) {
+			return 0;
+		}
+		if (argRoot.right == null && argRoot.left == null) {
+			return 1;
+		}
+		
+		return 1 + Math.max(height(argRoot.right), height(argRoot.left));
+	}
+	
+	public static <V> boolean isSymmetric(Node<V> argRoot) {
+		if (argRoot == null) {
+			return false;
+		}
+		
+		return isSymmetric(argRoot.left, argRoot.right);
+	}
+	
+	private static <V> boolean isSymmetric(Node<V> root1, Node<V> root2) {
+		if (root1 == null || root2 == null) {
+			return root1 == null && root2 == null;
+		}
+		
+		return root1.data.equals(root2.data) && isSymmetric(root1.left, root2.right) && isSymmetric(root1.right, root2.left);
+	}
+	
+	public static void main(String[] args) {
+//		Node<Integer> root = BSTPuzzles.binaryPreorderToTree(new int[] {60, 41, 16, 25, 53, 46, 42, 55, 74, 65, 63, 62, 64, 70}, 14, new AtomicInteger(0), Integer.MIN_VALUE, Integer.MAX_VALUE);
+//		IO.writeLn(height(root));
+		Node<Integer> root = new Node<>(60);
+		root.left = new Node<>(41);
+		root.right = new Node<>(41);
+		root.left.left = new Node<>(51);
+		root.right.right = new Node<>(51);
+		root.left.right = new Node<>(20);
+		root.right.left = new Node<>(20);
+		root.left.left.right = new Node<>(30);
+		root.right.right.left = new Node<>(30);
+		root.left.right.left = new Node<>(23);
+		root.right.left.right = new Node<>(23);
+		root.left.right.right = new Node<>(17);
+		root.right.left.left = new Node<>(17);
+		
+		IO.writeLn(isSymmetric(root));
+	}
+	
 }

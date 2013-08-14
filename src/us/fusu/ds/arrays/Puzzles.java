@@ -305,6 +305,29 @@ public class Puzzles {
 		return array[k - 1];
 	}
 
+	public static int[] mergeSortedArrays(int[] a1, int[] a2) {
+		int i = 0; int j = 0;
+		int n1 = a1.length;
+		int n2 = a2.length;
+		int[] ret = new int[n1 + n2];
+
+		while (i < n1 || j < n2) {
+			if (i < n1 && j < n2) {
+				if (a1[i] < a2[j]) {
+					ret[i+j] = a1[i++];
+				} else {
+					ret[i+j] = a2[j++];
+				}
+			} else if (i < n1) {
+				ret[i+j] = a1[i++];
+			} else if (j < n2) {
+				ret[i+j] = a2[j++];
+			}
+		}
+
+		return ret;
+	}
+
 	public static void main(String[] args) {
 		//		int a[][] = new int[][] 
 		//				{{1, 2, 3},
@@ -324,21 +347,26 @@ public class Puzzles {
 		//		System.out.println(isSymmetric(a, 3, 3));
 		//		System.out.println(isSymmetric(b, 3, 3));
 		//		System.out.println(isSymmetric(c, 3, 3));
+		//
+		//		int[] array = { 42, 92, 31, 73, 46, 11, 29, 53, 64, 4 };
+		//
+		//		System.out.println( "The array elements: " );
+		//		for ( int i = 0; i < array.length; i++ )
+		//			System.out.print( "  " + array[i] );
+		//
+		//		System.out.println( "\n" );
+		//		System.out.println( "1st smallest value is: " +
+		//				kthSmallest(array, 1));
+		//		System.out.println( "4th smallest value is: " +
+		//				kthSmallest(array, 4) );
+		//		System.out.println( "7th smallest value is: " +
+		//				kthSmallest(array, 7) );
+		//		System.out.println( "10th smallest value is: " +
+		//				kthSmallest(array, 10) );
 
-		int[] array = { 42, 92, 31, 73, 46, 11, 29, 53, 64, 4 };
-
-		System.out.println( "The array elements: " );
-		for ( int i = 0; i < array.length; i++ )
-			System.out.print( "  " + array[i] );
-
-		System.out.println( "\n" );
-		System.out.println( "1st smallest value is: " +
-				kthSmallest(array, 1));
-		System.out.println( "4th smallest value is: " +
-				kthSmallest(array, 4) );
-		System.out.println( "7th smallest value is: " +
-				kthSmallest(array, 7) );
-		System.out.println( "10th smallest value is: " +
-				kthSmallest(array, 10) );
+		int[] arr = mergeSortedArrays(new int[] {2, 3, 5, 7, 9, 13}, new int[] {1, 4, 6, 7, 8, 10, 11, 12});
+		IO.writeLn(Arrays.toString(arr));
+		
+		printArrayIntersection(new int[] {2, 3, 5, 7, 9, 13}, new int[] {1, 4, 6, 7, 8, 10, 11, 12});
 	}
 }
