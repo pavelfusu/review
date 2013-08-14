@@ -80,6 +80,19 @@ public class PuzzlesSingly {
 		return head;
 	}
 	
+	public static <V> Node<V> asCircularList(V[] arr) {
+  	  Node<V> head = new Node<>(arr[0]);
+      Node<V> current = head;
+      for (int i = 1; i < arr.length; i++) {
+          current.next = new Node<>(arr[i]);
+          current = current.next; 
+      }
+      
+      current.next = head;
+      
+      return head;
+	}
+	
 	public static <V> void print(Node<V> node) {
 		IO.write("[ ");
 		while (node != null) {
@@ -88,6 +101,38 @@ public class PuzzlesSingly {
 		}
 		IO.writeLn("]");
 	}
+	
+	public static <V> void printCircular(Node<V> someNode) {
+      IO.write("[ ");
+      Node<V> initialNode = someNode;
+      do {
+          IO.write(someNode.data + " ");
+          someNode = someNode.next;
+      } while (initialNode != someNode);
+      IO.writeLn("]");
+  }
+	
+	public static <V> void deleteFromCircularList(Node<V> argSomeNode, V argValueToDelete) {
+	  Node<V> initialNode = argSomeNode;
+	  
+	  if (argSomeNode == null) {
+	    return;
+	  }
+	  
+	  do {
+	    if (argSomeNode.next == null) {
+	      throw new IllegalArgumentException("That wasn't a circular list, liar!");
+	    }
+	    if (argSomeNode.next.data.equals(argValueToDelete)) {
+	      Node<V> next = argSomeNode.next;
+	      argSomeNode.next = next.next;
+	      next.next = null; // make it easy for GC
+	      break;
+	    }
+	    
+	    argSomeNode = argSomeNode.next;
+	  } while (initialNode.next != argSomeNode.next); // while we don't encounter the inital node again
+	}
 
 	public static void main(String[] args) {
 //		Node<Integer> head = asList(new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
@@ -95,12 +140,16 @@ public class PuzzlesSingly {
 //		head = reverseRecursive(head);
 //		print(head);
 		
-		Node<Integer> l1 = asList(new Integer[] {6, 8, 12, 15, 20, 22});
-		Node<Integer> l2 = asList(new Integer[] {1, 3, 5, 7, 13, 16, 17, 21, 23});
-		
-		print(l1);
-		print(l2);
-		
-		print(mergeSortedLists(l1, l2));
+//		Node<Integer> l1 = asList(new Integer[] {6, 8, 12, 15, 20, 22});
+//		Node<Integer> l2 = asList(new Integer[] {1, 3, 5, 7, 13, 16, 17, 21, 23});
+//		
+//		print(l1);
+//		print(l2);
+//		
+//		print(mergeSortedLists(l1, l2));
+	  
+	    Node<Integer> head = asCircularList(new Integer[] {1, 3, 5, 7, 13, 16, 17, 21, 23});
+	    deleteFromCircularList(head, 23);
+	    printCircular(head);
 	}
 }
