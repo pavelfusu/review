@@ -133,6 +133,28 @@ public class PuzzlesSingly {
 	    argSomeNode = argSomeNode.next;
 	  } while (initialNode.next != argSomeNode.next); // while we don't encounter the inital node again
 	}
+	
+	public static <V> boolean hasCycle(Node<V> someNode) {
+		if (someNode == null) {
+			throw new IllegalArgumentException();
+		}
+		Node<V> slow = someNode;
+		Node<V> fast = someNode;
+		
+		boolean cyclic = false;
+		
+		while (fast != null && slow != null && fast.next != null ) {
+			slow = slow.next;
+			fast = fast.next.next;
+			
+			if (slow == fast) {
+				cyclic = true;
+				break;
+			}
+		}
+		
+		return cyclic;
+	}
 
 	public static void main(String[] args) {
 //		Node<Integer> head = asList(new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
@@ -148,8 +170,13 @@ public class PuzzlesSingly {
 //		
 //		print(mergeSortedLists(l1, l2));
 	  
-	    Node<Integer> head = asCircularList(new Integer[] {1, 3, 5, 7, 13, 16, 17, 21, 23});
-	    deleteFromCircularList(head, 23);
-	    printCircular(head);
+		Node<Integer> head = asList(new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+		Node<Integer> tail = head;
+		while (tail.next != null) {
+			tail = tail.next;
+		}
+		tail.next = head.next.next.next.next;
+		
+		System.out.println(hasCycle(head));
 	}
 }

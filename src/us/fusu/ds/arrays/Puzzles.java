@@ -327,6 +327,18 @@ public class Puzzles {
 
 		return ret;
 	}
+	
+	// Accepts an array of elements where one element occurs an odd number of times and the others even. Returns the element with odd occurences
+	public static int arrayOf2(int[] arr) {
+		if (arr == null || arr.length == 0) {
+			throw new IllegalArgumentException();
+		}
+		int el = 0;
+		for (int i = 0; i < arr.length; i++) {
+			el ^= arr[i];
+		}
+		return el;
+	}
 
 	public static void main(String[] args) {
 		//		int a[][] = new int[][] 
@@ -364,9 +376,11 @@ public class Puzzles {
 		//		System.out.println( "10th smallest value is: " +
 		//				kthSmallest(array, 10) );
 
-		int[] arr = mergeSortedArrays(new int[] {2, 3, 5, 7, 9, 13}, new int[] {1, 4, 6, 7, 8, 10, 11, 12});
-		IO.writeLn(Arrays.toString(arr));
+//		int[] arr = mergeSortedArrays(new int[] {2, 3, 5, 7, 9, 13}, new int[] {1, 4, 6, 7, 8, 10, 11, 12});
+//		IO.writeLn(Arrays.toString(arr));
+//		
+//		printArrayIntersection(new int[] {2, 3, 5, 7, 9, 13}, new int[] {1, 4, 6, 7, 8, 10, 11, 12});
 		
-		printArrayIntersection(new int[] {2, 3, 5, 7, 9, 13}, new int[] {1, 4, 6, 7, 8, 10, 11, 12});
+		System.out.println(arrayOf2(new int[] {1, 1, 2, 2, 3, 4, 3, 4, 5, 6, 7, 5, 6, 7, 7})); // should be 7
 	}
 }
