@@ -86,6 +86,7 @@ public class Puzzles {
 		  return (l + 1 <= r) ? s.substring(l + 1, r) : "";
 		}
 		 
+	// does it in O(n^2)
 		public static String longestPalindromeSimple(String s) {
 		  int n = s.length();
 		  if (n == 0) return "";
@@ -101,6 +102,64 @@ public class Puzzles {
 		  }
 		  return longest;
 		}
+		
+		// Transform S into T.
+		// For example, S = "abba", T = "^#a#b#b#a#$".
+		// ^ and $ signs are sentinels appended to each end to avoid bounds checking
+		private static String preProcess(String argInput) {
+		  int n = argInput.length();
+		  if (n == 0) {
+		    return "";
+		  }
+		    
+		  StringBuffer ret = new StringBuffer();
+		  for (int i = 0; i < n; i++) {
+		    ret.append("#" + argInput.substring(i, i+1));
+		  }
+		 
+		  ret.append("#");
+		  
+		  return ret.toString();
+		}
+		 
+		// does it in O(n)
+		public static String longestPalindrome(String argInput) {
+		  String input = preProcess(argInput);
+		  int n = input.length();
+		  int[] p = new int[n];
+		  int C = 0, // current center 
+		      R = 0;
+		  
+		  for (int i = 1; i < n-1; i++) {
+		    int i_mirror = 2*C-i; // equals to i' = C - (i-C)
+		    
+		    p[i] = (R > i) ? Math.min(R-i, p[i_mirror]) : 0;
+		    
+		    // Attempt to expand palindrome centered at i
+		    while (i + 1 + p[i] < input.length() && i - 1 - p[i] >= 0 && input.charAt(i + 1 + p[i]) == input.charAt(i - 1 - p[i])) {
+		      p[i]++;
+		    }
+		 
+		    // If palindrome centered at i expand past R,
+		    // adjust center based on expanded palindrome.
+		    if (i + p[i] > R) {
+		      C = i;
+		      R = i + p[i];
+		    }
+		  }
+		 
+		  // Find the maximum element in P.
+		  int maxLen = 0;
+		  int centerIndex = 0;
+		  for (int i = 1; i < n-1; i++) {
+		    if (p[i] > maxLen) {
+		      maxLen = p[i];
+		      centerIndex = i;
+		    }
+		  }
+		  
+		  return input.substring(centerIndex - maxLen, centerIndex + maxLen + 1).replace("#", "");
+		}
 	
 	
 	public static void main(String[] args) {
@@ -109,6 +168,7 @@ public class Puzzles {
 //		str.getChars(0, str.length(), chars, 0);
 //		IO.writeLn(reverseWords(chars));
 //		permutation("abra");
-		System.out.println("Longest palindrome of abacdfgdcaba is " + longestPalindromeSimple("abacdfdcgdcaba")); // this doesn't work
+	  String input = "abacdfdcgdcaba";
+		System.out.println("Longest palindrome of " + input + " is " + longestPalindrome(input)); // this doesn't work
 	}
 }
