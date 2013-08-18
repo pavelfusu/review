@@ -1,10 +1,10 @@
 package us.fusu.ds.list.singly;
 
-public class Node<V> {
-	public Node<V> next;
+public class Entry<V> {
+	public Entry<V> next;
 	public V data;
 	
-	public Node(V argData) {
+	public Entry(V argData) {
 		data = argData;
 	}
 	

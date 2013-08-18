@@ -1,6 +1,8 @@
 package us.fusu.ds.arrays;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import us.fusu.io.IO;
 
@@ -339,7 +341,36 @@ public class Puzzles {
 		}
 		return el;
 	}
-
+	
+	public static void all2sum(int arr[], int sum) {
+		if (arr == null || arr.length < 2) {
+			return;
+		}
+		
+		for (int i = 0; i < arr.length; i++) {
+			for (int j = i + 1; j < arr.length; j++) {
+				if (arr[i] + arr[j] == sum) {
+					System.out.println(arr[i] + " +  " + arr[j] + " = " + sum);
+				}
+			}
+		}
+	}
+	
+	public static void all2sumLinear(int arr[], int sum) {
+		if (arr == null || arr.length < 2) {
+			return;
+		}
+		
+		Set<Integer> set = new HashSet<>();
+		for (int i = 0; i < arr.length; i++) {
+			if (set.contains(arr[i])) {
+				System.out.println(arr[i] + " +  " + (sum - arr[i]) + " = " + sum);
+			} else {
+				set.add(sum - arr[i]);
+			}
+		}
+	}
+	
 	public static void main(String[] args) {
 		//		int a[][] = new int[][] 
 		//				{{1, 2, 3},
@@ -381,6 +412,8 @@ public class Puzzles {
 //		
 //		printArrayIntersection(new int[] {2, 3, 5, 7, 9, 13}, new int[] {1, 4, 6, 7, 8, 10, 11, 12});
 		
-		System.out.println(arrayOf2(new int[] {1, 1, 2, 2, 3, 4, 3, 4, 5, 6, 7, 5, 6, 7, 7})); // should be 7
+//		System.out.println(arrayOf2(new int[] {1, 1, 2, 2, 3, 4, 3, 4, 5, 6, 7, 5, 6, 7, 7})); // should be 7
+//		all2sum(new int[] {9, -1, 3, 7, 5, 2, 4, 6, 4, 10, -2, 1}, 8);
+		all2sumLinear(new int[] {9, -1, 3, 7, 5, 2, 4, 6, 4, 10, -2, 1}, 8);
 	}
 }

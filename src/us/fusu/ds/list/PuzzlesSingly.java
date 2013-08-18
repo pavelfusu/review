@@ -1,15 +1,15 @@
 package us.fusu.ds.list;
 
-import us.fusu.ds.list.singly.Node;
+import us.fusu.ds.list.singly.Entry;
 import us.fusu.io.IO;
 
 public class PuzzlesSingly {
 	
-	public static <V> Node<V> reverse(Node<V> argHead) {
-		Node<V> previous = null;
+	public static <V> Entry<V> reverse(Entry<V> argHead) {
+		Entry<V> previous = null;
 		
 		while (argHead != null) {
-			Node<V> next = argHead.next;
+			Entry<V> next = argHead.next;
 			argHead.next = previous;
 			previous = argHead;
 			argHead = next;
@@ -18,12 +18,12 @@ public class PuzzlesSingly {
 		return previous;
 	}
 	
-	public static <V> Node<V> reverseRecursive(Node<V> argHead, Node<V> argPevious) {
+	public static <V> Entry<V> reverseRecursive(Entry<V> argHead, Entry<V> argPevious) {
 		if (argHead == null) {
 			return argHead;
 		}
 		
-		Node<V> next = argHead.next;
+		Entry<V> next = argHead.next;
 		argHead.next = argPevious;
 
 		if (next.next == null) {
@@ -34,16 +34,16 @@ public class PuzzlesSingly {
 		}
 	}
 	
-	public static <V> Node<V> reverseRecursive(Node<V> argHead) {
+	public static <V> Entry<V> reverseRecursive(Entry<V> argHead) {
 		return reverseRecursive(argHead, null);
 	}
 	
-	public static <V extends Comparable<V>> Node<V> mergeSortedLists(Node<V> root1, Node<V> root2) {
-		Node<V> root = null;
-		Node<V> current = null;
+	public static <V extends Comparable<V>> Entry<V> mergeSortedLists(Entry<V> root1, Entry<V> root2) {
+		Entry<V> root = null;
+		Entry<V> current = null;
 		
 		while (root1 != null && root2 != null) {
-			Node<V> next = root1.data.compareTo(root2.data) < 0 ? root1 : root2;
+			Entry<V> next = root1.data.compareTo(root2.data) < 0 ? root1 : root2;
 			
 			if (root == null) {
 				root = next;
@@ -69,22 +69,22 @@ public class PuzzlesSingly {
 		return root;
 	}
 	
-	public static <V> Node<V> asList(V[] arr) {
-		Node<V> head = new Node<>(arr[0]);
-		Node<V> current = head;
+	public static <V> Entry<V> asList(V[] arr) {
+		Entry<V> head = new Entry<>(arr[0]);
+		Entry<V> current = head;
 		for (int i = 1; i < arr.length; i++) {
-			current.next = new Node<>(arr[i]);
+			current.next = new Entry<>(arr[i]);
 			current = current.next; 
 		}
 		
 		return head;
 	}
 	
-	public static <V> Node<V> asCircularList(V[] arr) {
-  	  Node<V> head = new Node<>(arr[0]);
-      Node<V> current = head;
+	public static <V> Entry<V> asCircularList(V[] arr) {
+  	  Entry<V> head = new Entry<>(arr[0]);
+      Entry<V> current = head;
       for (int i = 1; i < arr.length; i++) {
-          current.next = new Node<>(arr[i]);
+          current.next = new Entry<>(arr[i]);
           current = current.next; 
       }
       
@@ -93,7 +93,7 @@ public class PuzzlesSingly {
       return head;
 	}
 	
-	public static <V> void print(Node<V> node) {
+	public static <V> void print(Entry<V> node) {
 		IO.write("[ ");
 		while (node != null) {
 			IO.write(node.data + " ");
@@ -102,9 +102,9 @@ public class PuzzlesSingly {
 		IO.writeLn("]");
 	}
 	
-	public static <V> void printCircular(Node<V> someNode) {
+	public static <V> void printCircular(Entry<V> someNode) {
       IO.write("[ ");
-      Node<V> initialNode = someNode;
+      Entry<V> initialNode = someNode;
       do {
           IO.write(someNode.data + " ");
           someNode = someNode.next;
@@ -112,8 +112,8 @@ public class PuzzlesSingly {
       IO.writeLn("]");
   }
 	
-	public static <V> void deleteFromCircularList(Node<V> argSomeNode, V argValueToDelete) {
-	  Node<V> initialNode = argSomeNode;
+	public static <V> void deleteFromCircularList(Entry<V> argSomeNode, V argValueToDelete) {
+	  Entry<V> initialNode = argSomeNode;
 	  
 	  if (argSomeNode == null) {
 	    return;
@@ -124,7 +124,7 @@ public class PuzzlesSingly {
 	      throw new IllegalArgumentException("That wasn't a circular list, liar!");
 	    }
 	    if (argSomeNode.next.data.equals(argValueToDelete)) {
-	      Node<V> next = argSomeNode.next;
+	      Entry<V> next = argSomeNode.next;
 	      argSomeNode.next = next.next;
 	      next.next = null; // make it easy for GC
 	      break;
@@ -134,12 +134,12 @@ public class PuzzlesSingly {
 	  } while (initialNode.next != argSomeNode.next); // while we don't encounter the inital node again
 	}
 	
-	public static <V> boolean hasCycle(Node<V> someNode) {
+	public static <V> boolean hasCycle(Entry<V> someNode) {
 		if (someNode == null) {
 			throw new IllegalArgumentException();
 		}
-		Node<V> slow = someNode;
-		Node<V> fast = someNode;
+		Entry<V> slow = someNode;
+		Entry<V> fast = someNode;
 		
 		boolean cyclic = false;
 		
@@ -170,8 +170,8 @@ public class PuzzlesSingly {
 //		
 //		print(mergeSortedLists(l1, l2));
 	  
-		Node<Integer> head = asList(new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
-		Node<Integer> tail = head;
+		Entry<Integer> head = asList(new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+		Entry<Integer> tail = head;
 		while (tail.next != null) {
 			tail = tail.next;
 		}

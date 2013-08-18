@@ -121,7 +121,7 @@ public class Puzzles {
         }
         return quotient;
 	}
-
+	
 	public static void main(String[] args) {
 //		getNthFibonacci(84);
 //		for (int i = 0; i<= 84; i++) {
