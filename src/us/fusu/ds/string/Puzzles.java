@@ -226,7 +226,46 @@ public class Puzzles {
 		
 		return input.substring(currentMinimumStartIndex, currentMinimumEndIndex + 1);
 	}
-
+	
+	/**
+	   * Finds the first occurrence of the pattern in the text using Knuth-Morris-Pratt algorithm
+	   */
+	  public static int matchKMP(String pattern, String text) {
+	    int j = 0;
+	    if (text.length() == 0) {
+	      return -1;
+	    }
+	    
+	    int[] failure = preProcessKMP(pattern);
+	    
+	    for (int i = 0; i < text.length(); i++) {
+	      while (j > 0 && pattern.charAt(j) != text.charAt(i)) {
+	        j = failure[j - 1];
+	      }
+	      if (pattern.charAt(j) == text.charAt(i)) { j++; }
+	      if (j == pattern.length()) {
+	        return i - pattern.length() + 1;
+	      }
+	    }
+	    
+	    return -1;
+	  }
+	  
+	  private static int[] preProcessKMP(String pattern) {
+	    int j = 0;
+	    int[] failure = new int[pattern.length()];
+	    for (int i = 1; i < pattern.length(); i++) {
+	      while (j > 0 && pattern.charAt(j) != pattern.charAt(i)) { 
+	        j = failure[j - 1];
+	      }
+	      if (pattern.charAt(j) == pattern.charAt(i)) { 
+	        j++; 
+	      }
+	      failure[i] = j;
+	    }
+	    
+	    return failure;
+	  }
 
 	public static void main(String[] args) {
 		//		String str = "My hat is round";
@@ -239,6 +278,11 @@ public class Puzzles {
 
 //		brackets(3);
 		
-		System.out.println(subStringFromCharSet("acbbaca", new char[] {'a', 'b', 'a'}));
+//		System.out.println(subStringFromCharSet("acbbaca", new char[] {'a', 'b', 'a'}));
+
+	  System.out.println(matchKMP("aba", "akrabarot"));
+	  System.out.println(matchKMP("abak", "akrabarot"));
+	  System.out.println(matchKMP("lol", "akrabarot"));
+	  System.out.println(matchKMP("rot", "akrabarot"));
 	}
 }
