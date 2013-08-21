@@ -36,6 +36,10 @@ public abstract class BinaryTreeTraversal {
 				traversals.put(argType, new InOrderTraversal());
 				break;
 			}
+			case IN_ORDER_REVERSED: {
+              traversals.put(argType, new InOrderReversedTraversal());
+              break;
+            }
 			case PRE_ORDER: {
 				traversals.put(argType, new PreOrderTraversal());
 				break;

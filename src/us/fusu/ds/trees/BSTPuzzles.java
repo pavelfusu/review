@@ -1,8 +1,9 @@
 package us.fusu.ds.trees;
 
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import us.fusu.ds.trees.binary.iterator.BinaryTreeIterator;
 
 import us.fusu.ds.trees.binary.Node;
 import us.fusu.ds.trees.binary.traversals.BinaryTreeTraversal;
@@ -143,6 +144,43 @@ public class BSTPuzzles {
 		return root;
 	}
 	
+	public static boolean any2Sum(Node<Integer> argRoot, int argTarget) {
+	  if (argRoot == null) {
+	    return false;
+	  }
+
+	  Iterator<Integer> min = BinaryTreeIterator.iterator(TraversalType.IN_ORDER, argRoot);
+	  Iterator<Integer> max = BinaryTreeIterator.iterator(TraversalType.IN_ORDER_REVERSED, argRoot);
+	  
+	  if (!min.hasNext() || !max.hasNext()) {
+	    return false;
+	  }
+	  
+	  Integer nextMin = min.next();
+	  Integer nextMax = max.next();
+	  
+	  while (nextMin + nextMax != argTarget) {
+	    int sum = nextMin + nextMax;
+	    
+	    if (sum > argTarget && max.hasNext()) {
+	      nextMax = max.next();
+	    } else if (sum < argTarget && min.hasNext()) {
+	      nextMin = min.next();
+	    } else {
+	      break;
+	    }
+	  }
+	  
+	  boolean found = nextMin + nextMax == argTarget;
+	  
+	  if (found) {
+	    IO.writeLn(nextMin + " + "  + nextMax + " = " + argTarget);
+	  }
+	  
+	  return found;
+	}
+
+	
 	public static void main(String[] args) {
 		Node<Integer> root = binaryPreorderToTree(new int[] {60, 41, 16, 25, 53, 46, 42, 55, 74, 65, 63, 62, 64, 70}, 14, new AtomicInteger(0), Integer.MIN_VALUE, Integer.MAX_VALUE);
 		BinaryTreeTraversal.traverse(root, TraversalType.IN_ORDER, new BinaryTreeTraversal.NodeOperation<Integer>() {
@@ -152,5 +190,12 @@ public class BSTPuzzles {
 				IO.write(argValue + " ");
 			}
 		});
+		
+		IO.writeLn();
+
+		any2Sum(root, 62 + 53);
+		any2Sum(root, 71 + 16);
+		any2Sum(root, 62 + 16);
+		any2Sum(root, 62 + 15);
 	}
 }

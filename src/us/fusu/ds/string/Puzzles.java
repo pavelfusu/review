@@ -276,13 +276,13 @@ public class Puzzles {
 		//		String input = "abacdfdcgdcaba";
 		//		System.out.println("Longest palindrome of " + input + " is " + longestPalindrome(input));
 
-//		brackets(3);
+		brackets(3);
 		
 //		System.out.println(subStringFromCharSet("acbbaca", new char[] {'a', 'b', 'a'}));
 
-	  System.out.println(matchKMP("aba", "akrabarot"));
-	  System.out.println(matchKMP("abak", "akrabarot"));
-	  System.out.println(matchKMP("lol", "akrabarot"));
-	  System.out.println(matchKMP("rot", "akrabarot"));
+//	  System.out.println(matchKMP("aba", "akrabarot"));
+//	  System.out.println(matchKMP("abak", "akrabarot"));
+//	  System.out.println(matchKMP("lol", "akrabarot"));
+//	  System.out.println(matchKMP("rot", "akrabarot"));
 	}
 }

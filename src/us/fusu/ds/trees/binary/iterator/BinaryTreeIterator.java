@@ -12,11 +12,14 @@ public abstract class BinaryTreeIterator<V> implements Iterator<V> {
 		throw new UnsupportedOperationException();
 	}
 	
-	static <K> Iterator<K> iterator(TraversalType argType, Node<K> argRoot) {
+	public static <K> Iterator<K> iterator(TraversalType argType, Node<K> argRoot) {
 		switch (argType) {
 			case IN_ORDER: {
 				return new InOrderIterator<K>(argRoot);
 			}
+			case IN_ORDER_REVERSED: {
+              return new InOrderReversedIterator<K>(argRoot);
+            }
 			case PRE_ORDER: {
 				return new PreOrderIterator<K>(argRoot);
 			}
