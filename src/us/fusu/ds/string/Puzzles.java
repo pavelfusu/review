@@ -161,21 +161,21 @@ public class Puzzles {
 		return input.substring(centerIndex - maxLen, centerIndex + maxLen + 1).replace("#", "");
 	}
 
-	private static void brackets(String output, int open, int close, int pairs, boolean opened) {
-		if (open == pairs && close == pairs && output.length() == pairs * 2) {
+	private static void brackets(String output, int open, int close, int pairs) {
+		if (open == pairs && close == pairs) {
 			System.out.println(output);
 		} else {
 			if (open < pairs) {
-				brackets(output + "(", open + 1, close, pairs, true);
+				brackets(output + "(", open + 1, close, pairs);
 			}
-			if (close < open && opened) {
-				brackets(output + ")", open, close + 1, pairs, opened);
+			if (close < open) {
+				brackets(output + ")", open, close + 1, pairs);
 			}
 		}
 	}
 
 	public static void brackets(int total) {
-		brackets("", 0, 0, total, false);
+		brackets("", 0, 0, total);
 	}
 	// Find shortest substring in a string that contains all of a set of characters
 	public static String subStringFromCharSet(String input, char[] charSet) {

@@ -19,7 +19,7 @@ public class NTreePuzzles {
     }
 
     Iterator<Node<V>> it = argRoot.childIterator();
-    int i = 0; // nr of branches that a or b ar on, could be max 2 (considering unique nodes)
+    int i = 0; // nr of branches that a or b are on, could be max 2 (considering unique nodes)
     Node<V> lastFoundLCA = null;
     while (it.hasNext()) {
       Node<V> node = lowestCommonAncestor(it.next(), a, b);
