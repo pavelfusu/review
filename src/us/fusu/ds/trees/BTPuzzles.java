@@ -106,11 +106,7 @@ public class BTPuzzles {
 	
 	public static <V> boolean equals(Node<V> root1, Node<V> root2) {
 		if (root1 == null || root2 == null) {
-			if (root1 == null && root2 == null) {
-				return true;
-			} else {
-				return false;
-			}
+			return root1 == null && root2 == null;
 		}
 		
 		return (root1 == root2 || root1.data.equals(root2.data)) && equals(root1.left, root2.left) && equals(root1.right, root2.right);
