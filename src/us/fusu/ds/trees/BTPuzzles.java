@@ -2,8 +2,11 @@ package us.fusu.ds.trees;
 
 import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import us.fusu.ds.trees.binary.Node;
+import us.fusu.ds.trees.binary.traversals.BinaryTreeTraversal;
+import us.fusu.ds.trees.binary.traversals.TraversalType;
 import us.fusu.io.IO;
 
 public class BTPuzzles {
@@ -34,12 +37,9 @@ public class BTPuzzles {
 		}
 		
 		shortestpath(root.left, a, b, outputPath);
+		shortestpath(root.right, a, b, outputPath);
 		
-		if (outputPath.isEmpty()) {
-			shortestpath(root.right, a, b, outputPath);
-		} else {
-			outputPath.push(root);
-		}
+		outputPath.push(root);
 	}
 
 	public static <V> List<Node<V>> shortestPath(Node<V> root, Node<V> a, Node<V> b) {
@@ -176,23 +176,36 @@ public class BTPuzzles {
 	}
 	
 	public static void main(String[] args) {
-//		Node<Integer> root = BSTPuzzles.binaryPreorderToTree(new int[] {60, 41, 16, 25, 53, 46, 42, 55, 74, 65, 63, 62, 64, 70}, 14, new AtomicInteger(0), Integer.MIN_VALUE, Integer.MAX_VALUE);
-//		IO.writeLn(height(root));
-		Node<Integer> root = new Node<>(60);
-		root.left = new Node<>(41);
-		root.right = new Node<>(41);
-		root.left.left = new Node<>(51);
-		root.right.right = new Node<>(51);
-		root.left.right = new Node<>(20);
-		root.right.left = new Node<>(20);
-		root.left.left.right = new Node<>(30);
-		root.right.right.left = new Node<>(30);
-		root.left.right.left = new Node<>(23);
-		root.right.left.right = new Node<>(23);
-		root.left.right.right = new Node<>(17);
-		root.right.left.left = new Node<>(17);
+//		Node<Integer> root = new Node<>(60);
+//		root.left = new Node<>(41);
+//		root.right = new Node<>(41);
+//		root.left.left = new Node<>(51);
+//		root.right.right = new Node<>(51);
+//		root.left.right = new Node<>(20);
+//		root.right.left = new Node<>(20);
+//		root.left.left.right = new Node<>(30);
+//		root.right.right.left = new Node<>(30);
+//		root.left.right.left = new Node<>(23);
+//		root.right.left.right = new Node<>(23);
+//		root.left.right.right = new Node<>(17);
+//		root.right.left.left = new Node<>(17);
 		
-		IO.writeLn(isSymmetric(root));
+		Node<Integer> root = BSTPuzzles.binaryPreorderToTree(new int[] {60, 41, 16, 25, 53, 46, 42, 55, 74, 65, 63, 62, 64, 70}, 14, new AtomicInteger(0), Integer.MIN_VALUE, Integer.MAX_VALUE);
+		BinaryTreeTraversal.traverse(root, TraversalType.IN_ORDER, new BinaryTreeTraversal.NodeOperation<Integer>() {
+
+			@Override
+			public void visit(Integer argValue) {
+				IO.write(argValue + " ");
+			}
+		});
+		
+		IO.writeLn();
+		
+		List<Node<Integer>> list = shortestPath(root, new Node<>(25), new Node<>(53));
+		
+		for (Node<Integer> node:list) {
+			IO.write(node.data + " ");
+		}
 	}
 	
 }

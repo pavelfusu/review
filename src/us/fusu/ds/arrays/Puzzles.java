@@ -212,6 +212,7 @@ public class Puzzles {
 		return Math.max(a,b);
 	}
 
+	// prints the intersection of 2 sorted arrays
 	public static void printArrayIntersection(int[] a1, int[] a2) {
 		int i = 0; int j = 0;
 		int n1 = a1.length;
@@ -342,6 +343,7 @@ public class Puzzles {
 		return el;
 	}
 	
+	// prints all 2 sums in an unsorted array
 	public static void all2sum(int arr[], int sum) {
 		if (arr == null || arr.length < 2) {
 			return;
