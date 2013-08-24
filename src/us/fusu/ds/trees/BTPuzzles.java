@@ -104,6 +104,22 @@ public class BTPuzzles {
 		}
 	}
 	
+	public static <V> boolean isSymmetric(Node<V> argRoot) {
+		if (argRoot == null) {
+			return false;
+		}
+		
+		return isSymmetric(argRoot.left, argRoot.right);
+	}
+	
+	private static <V> boolean isSymmetric(Node<V> root1, Node<V> root2) {
+		if (root1 == null || root2 == null) {
+			return root1 == null && root2 == null;
+		}
+		
+		return root1.data.equals(root2.data) && isSymmetric(root1.left, root2.right) && isSymmetric(root1.right, root2.left);
+	}
+	
 	public static <V> boolean equals(Node<V> root1, Node<V> root2) {
 		if (root1 == null || root2 == null) {
 			return root1 == null && root2 == null;
@@ -153,22 +169,6 @@ public class BTPuzzles {
 		}
 		
 		return 1 + Math.max(height(argRoot.right), height(argRoot.left));
-	}
-	
-	public static <V> boolean isSymmetric(Node<V> argRoot) {
-		if (argRoot == null) {
-			return false;
-		}
-		
-		return isSymmetric(argRoot.left, argRoot.right);
-	}
-	
-	private static <V> boolean isSymmetric(Node<V> root1, Node<V> root2) {
-		if (root1 == null || root2 == null) {
-			return root1 == null && root2 == null;
-		}
-		
-		return root1.data.equals(root2.data) && isSymmetric(root1.left, root2.right) && isSymmetric(root1.right, root2.left);
 	}
 	
 	public static void main(String[] args) {
