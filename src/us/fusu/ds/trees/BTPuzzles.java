@@ -39,7 +39,9 @@ public class BTPuzzles {
 		shortestpath(root.left, a, b, outputPath);
 		shortestpath(root.right, a, b, outputPath);
 		
-		outputPath.push(root);
+		if (!outputPath.isEmpty()) {
+			outputPath.push(root);
+		}
 	}
 
 	public static <V> List<Node<V>> shortestPath(Node<V> root, Node<V> a, Node<V> b) {
@@ -48,11 +50,10 @@ public class BTPuzzles {
 		
 		Node<V> lca = lowestCommonAncestor(root, a, b);
 		
-		Node<V> r = lca.data.equals(a.data) ? a : (lca.data.equals(b.data) ? b : lca);
+		shortestpath(lca.left, a, b, path1);
+		shortestpath(lca.right, a, b, path2);
 		
-		shortestpath(r.left, a, b, path1);
-		shortestpath(r.right, a, b, path2);
-		path1.push(r);
+		path1.push(lca);
 		while (!path2.isEmpty()) {
 			path1.push(path2.pop());
 		}
@@ -197,7 +198,7 @@ public class BTPuzzles {
 		
 		IO.writeLn();
 		
-		List<Node<Integer>> list = shortestPath(root, new Node<>(25), new Node<>(53));
+		List<Node<Integer>> list = shortestPath(root, new Node<>(25), new Node<>(55));
 		
 		for (Node<Integer> node:list) {
 			IO.write(node.data + " ");

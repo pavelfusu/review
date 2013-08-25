@@ -58,7 +58,7 @@ public class Puzzles {
 		return isPalindromeRecursive(x, x);
 	}
 	
-	public static int modulo(int divisor, int dividend) {
+	public static int moduloLong(int divisor, int dividend) {
 	  int i;
 
 	  if (dividend == 0) {
@@ -86,7 +86,7 @@ public class Puzzles {
 	  return divisor;
 	}
 	
-	public static int divide(int divisor, int dividend) {
+	public static int divideLong(int divisor, int dividend) {
 
 	    int quotient = 0;
 	    int i = 16;  /* Number of bits to process */
@@ -122,6 +122,40 @@ public class Puzzles {
         return quotient;
 	}
 	
+	
+	public static int pow(int base, int exp) {
+	    int result = 1;
+	    while (exp != 0)
+	    {
+	        if ((exp & 1) == 1)
+	            result *= base;
+	        exp >>= 1;
+	        base *= base;
+	    }
+
+	    return result;
+	}
+	
+	public static int divide(int dividend, int divisor) {
+		
+		if (divisor == 0) {
+			throw new ArithmeticException("Division by 0");
+		}
+		
+		int a = Math.abs(dividend);
+		int b = Math.abs(divisor);
+		int result = 0, reminder = a;
+		
+		while (reminder >= b) {
+			int count = 0, bshift = 0;
+			for (bshift = b; bshift << 1 <= reminder; bshift <<= 1, count++) {}
+			result += 1 << count;
+			reminder -= bshift;
+		}
+		
+		return ((dividend >=0 && divisor >= 0) || (dividend <= 0 && divisor <= 0)) ? result : -result;
+	}
+	
 	public static void main(String[] args) {
 //		getNthFibonacci(84);
 //		for (int i = 0; i<= 84; i++) {
@@ -130,7 +164,13 @@ public class Puzzles {
 	  
 	    System.out.println(divide(7, 2));
 	    System.out.println(divide(9, 3));
-	    System.out.println(modulo(7, 2));
-        System.out.println(modulo(9, 3));
+	    System.out.println(divide(3, 1));
+	    System.out.println(divide(70, 5));
+	    System.out.println(divide(71, 5));
+	    System.out.println(divide(0, 5));
+	    System.out.println(divide(71, -5));
+//	    System.out.println(divide(0, 0));
+//	    System.out.println(modulo(7, 2));
+//        System.out.println(modulo(9, 3));
 	}
 }
