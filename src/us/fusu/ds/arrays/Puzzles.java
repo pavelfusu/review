@@ -200,6 +200,119 @@ public class Puzzles {
 		}
 		return max;
 	}
+	
+	public static void main(String[] args) {
+		//		int a[][] = new int[][] 
+		//				{{1, 2, 3},
+		//				{4, 5, 6},
+		//				{7, 8, 9}};
+		//
+		//		int b[][] = new int[][] 
+		//				{{9, 8, 7},
+		//				{6, 5, 4},
+		//				{3, 2, 1}};
+		//
+		//		int c[][] = new int[][] 
+		//				{{9, 8, 7},
+		//				{4, 5, 4},
+		//				{7, 8, 9}};
+		//
+		//		System.out.println(isSymmetric(a, 3, 3));
+		//		System.out.println(isSymmetric(b, 3, 3));
+		//		System.out.println(isSymmetric(c, 3, 3));
+		//
+		//		int[] array = { 42, 92, 31, 73, 46, 11, 29, 53, 64, 4 };
+		//
+		//		System.out.println( "The array elements: " );
+		//		for ( int i = 0; i < array.length; i++ )
+		//			System.out.print( "  " + array[i] );
+		//
+		//		System.out.println( "\n" );
+		//		System.out.println( "1st smallest value is: " +
+		//				kthSmallest(array, 1));
+		//		System.out.println( "4th smallest value is: " +
+		//				kthSmallest(array, 4) );
+		//		System.out.println( "7th smallest value is: " +
+		//				kthSmallest(array, 7) );
+		//		System.out.println( "10th smallest value is: " +
+		//				kthSmallest(array, 10) );
+
+//		int[] arr = mergeSortedArrays(new int[] {2, 3, 5, 7, 9, 13}, new int[] {1, 4, 6, 7, 8, 10, 11, 12});
+//		IO.writeLn(Arrays.toString(arr));
+//		
+//		printArrayIntersection(new int[] {2, 3, 5, 7, 9, 13}, new int[] {1, 4, 6, 7, 8, 10, 11, 12});
+		
+//		System.out.println(arrayOf2(new int[] {1, 1, 2, 2, 3, 4, 3, 4, 5, 6, 7, 5, 6, 7, 7})); // should be 7
+//		all2sum(new int[] {9, -1, 3, 7, 5, 2, 4, 6, 4, 10, -2, 1}, 8);
+		all2sumLinear(new int[] {9, -1, 3, 7, 5, 2, 4, 6, 4, 10, -2, 1}, 8);
+		
+		int[][] arr = new int[][] 
+				{
+					{43, 42, 41, 40, 39, 38, 37, 64}, 
+					{44, 21, 20, 19, 18, 17, 36, 63}, 
+					{45, 22, 7, 6, 5, 16, 35, 62}, 
+					{46, 23, 8, 1, 4, 15, 34, 61}, 
+					{47, 24, 9, 2, 3, 14, 33, 60}, 
+					{48, 25, 10, 11, 12, 13, 32, 59}, 
+					{49, 26, 27, 28, 29, 30, 31, 58}, 
+					{50, 51, 52, 53, 54, 55, 56, 57}};
+//		spiraleArray(arr);
+		
+		spiraleArray2(arr);
+	}
+	
+	public static void spiraleArray2(int[][] arr) {
+		int n = arr.length / 2 - 1;
+		int m = arr.length / 2 - 1;
+		
+		System.out.println(arr[n][m]);
+		int x = 1;
+		for (int i = 0; i < arr.length; i++) {
+			for (int j = 1; j <= i; j++) {
+				System.out.println(arr[n+(j*x)][m]);
+				n += j * x;
+			}
+			
+			for (int k = 1; k <= i; k++) {
+				System.out.println(arr[n][m+(k*x)]);
+				m += k * x;
+			}
+			
+			x*= -1;
+		}
+	}
+	
+	public static void spiraleArray(int[][] arr) {
+		
+		int i = arr.length / 2 - 1;
+		int j = arr.length / 2 - 1;
+		int l = 1;
+		int sign = 1;
+		
+		System.out.println(arr[i][j]);
+		
+		while (l < arr.length) {
+			for (int k = 0; k < l; k++) {
+				i += sign;
+				System.out.println(arr[i][j]);
+			}
+			
+			for (int k = 0; k < l; k++) {
+				j += sign;
+				System.out.println(arr[i][j]);
+			}
+			
+			l++;
+			sign *= -1;
+		}
+		
+		for (int k = 0; k < l - 1; k++) {
+			i += sign;
+			System.out.println(arr[i][j]);
+		}
+	}
+	
+	
 
 	public static int maxCoin(int[] coin, int start, int end) {
 		if (start > end) {
@@ -373,49 +486,4 @@ public class Puzzles {
 		}
 	}
 	
-	public static void main(String[] args) {
-		//		int a[][] = new int[][] 
-		//				{{1, 2, 3},
-		//				{4, 5, 6},
-		//				{7, 8, 9}};
-		//
-		//		int b[][] = new int[][] 
-		//				{{9, 8, 7},
-		//				{6, 5, 4},
-		//				{3, 2, 1}};
-		//
-		//		int c[][] = new int[][] 
-		//				{{9, 8, 7},
-		//				{4, 5, 4},
-		//				{7, 8, 9}};
-		//
-		//		System.out.println(isSymmetric(a, 3, 3));
-		//		System.out.println(isSymmetric(b, 3, 3));
-		//		System.out.println(isSymmetric(c, 3, 3));
-		//
-		//		int[] array = { 42, 92, 31, 73, 46, 11, 29, 53, 64, 4 };
-		//
-		//		System.out.println( "The array elements: " );
-		//		for ( int i = 0; i < array.length; i++ )
-		//			System.out.print( "  " + array[i] );
-		//
-		//		System.out.println( "\n" );
-		//		System.out.println( "1st smallest value is: " +
-		//				kthSmallest(array, 1));
-		//		System.out.println( "4th smallest value is: " +
-		//				kthSmallest(array, 4) );
-		//		System.out.println( "7th smallest value is: " +
-		//				kthSmallest(array, 7) );
-		//		System.out.println( "10th smallest value is: " +
-		//				kthSmallest(array, 10) );
-
-//		int[] arr = mergeSortedArrays(new int[] {2, 3, 5, 7, 9, 13}, new int[] {1, 4, 6, 7, 8, 10, 11, 12});
-//		IO.writeLn(Arrays.toString(arr));
-//		
-//		printArrayIntersection(new int[] {2, 3, 5, 7, 9, 13}, new int[] {1, 4, 6, 7, 8, 10, 11, 12});
-		
-//		System.out.println(arrayOf2(new int[] {1, 1, 2, 2, 3, 4, 3, 4, 5, 6, 7, 5, 6, 7, 7})); // should be 7
-//		all2sum(new int[] {9, -1, 3, 7, 5, 2, 4, 6, 4, 10, -2, 1}, 8);
-		all2sumLinear(new int[] {9, -1, 3, 7, 5, 2, 4, 6, 4, 10, -2, 1}, 8);
-	}
 }
