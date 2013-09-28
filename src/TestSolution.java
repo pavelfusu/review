@@ -133,31 +133,33 @@ public class TestSolution
     sol.radixTreeSet(root, "brother", 190);
 
     sol.radixTreeRemove(root, "brother");
-    System.out.println(entryList(root));
+    assertEquals("[2, 290, 0, 12, 1, 14, 19, -2, -1, -3, -55, 21, 89]", entryList(root).toString());
     sol.radixTreeRemove(root, "b");
-    System.out.println(entryList(root));
+    assertEquals("[290, 0, 12, 1, 14, 19, -2, -1, -3, -55, 21, 89]", entryList(root).toString());
     sol.radixTreeRemove(root, "z");
-    System.out.println(entryList(root));
+    assertEquals("[290, 0, 12, 1, 14, 19, -2, -3, -55, 21, 89]", entryList(root).toString());
     sol.radixTreeRemove(root, "zebra");
-    System.out.println(entryList(root));
+    assertEquals("[290, 0, 12, 1, 14, 19, -2, -3, 21, 89]", entryList(root).toString());
     sol.radixTreeRemove(root, "brotherhood");
-    System.out.println(entryList(root));
+    assertEquals("[0, 12, 1, 14, 19, -2, -3, 21, 89]", entryList(root).toString());
     sol.radixTreeRemove(root, "t");
-    System.out.println(entryList(root));
+    assertEquals("[0, 12, 1, 14, 19, -3, 21, 89]", entryList(root).toString());
     sol.radixTreeRemove(root, "s");
-    System.out.println(entryList(root));
+    assertEquals("[0, 12, 14, 19, -3, 21, 89]", entryList(root).toString());
     sol.radixTreeRemove(root, "sergey");
-    System.out.println(entryList(root));
+    assertEquals("[0, 12, 14, -3, 21, 89]", entryList(root).toString());
     sol.radixTreeRemove(root, "zinocerus");
-    System.out.println(entryList(root));
+    assertEquals("[0, 12, 14, -3, 89]", entryList(root).toString());
     sol.radixTreeRemove(root, "d");
-    System.out.println(entryList(root));
+    assertEquals("[12, 14, -3, 89]", entryList(root).toString());
     sol.radixTreeRemove(root, "sergeant");
-    System.out.println(entryList(root));
+    assertEquals("[12, -3, 89]", entryList(root).toString());
     sol.radixTreeRemove(root, "zara");
-    System.out.println(entryList(root));
+    assertEquals("[12, 89]", entryList(root).toString());
     sol.radixTreeRemove(root, "zinocopolus");
-    System.out.println(entryList(root));
+    assertEquals("[12]", entryList(root).toString());
+    sol.radixTreeRemove(root, "i");
+    assertEquals("[]", entryList(root).toString());
   }
 
   public void testRadixTreeSet()

@@ -84,7 +84,7 @@ public class Solution {
           node.removeChild(ch);
 
           if (child.childrenNumber() == 0) {
-            if (node.childrenNumber() == 1 && node.getValue() == null) {
+            if (node.childrenNumber() == 1 && node.getValue() == null && node.getRadix() != null) {
               TrieNode<T> onlyChild = node.getFirstChild();
               node.setValue(onlyChild.getValue());
               node.arr = onlyChild.arr;
@@ -108,8 +108,10 @@ public class Solution {
             Iterator<Map.Entry<Character, Solution.TrieNode<T>>> it = child.treeMap.entrySet().iterator();
 
             while (it.hasNext()) {
-              Map.Entry<Character, Solution.TrieNode<T>> entry = it.next();
-              radixTreeMove(entry.getValue(), node);
+              Solution.TrieNode<T> toMove = it.next().getValue();
+              toMove.ch = ch;
+              toMove.radix = ch + toMove.radix;
+              radixTreeMove(toMove, node);
             }
 
             child.treeMap = null;
