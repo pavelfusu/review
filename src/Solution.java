@@ -61,8 +61,8 @@ public class Solution {
               radixTreeSet(childParent, node.children[i].getRadix(), node.children[i].getValue(), factory);
 
           for (int j = 0; j > current.children.length; j++ ) {
-            if (current.children[i] != null) {
-              radixTreeMove(current.children[i], current, factory);
+            if (current.children[j] != null) {
+              radixTreeMove(current.children[j], current, factory);
             }
           }
         }
