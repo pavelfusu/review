@@ -1,6 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.Stack;
 
 @SuppressWarnings({"javadoc", "unchecked"})
 public class Solution {
@@ -35,14 +35,12 @@ public class Solution {
     TrieNode<T> child = node.getChild(ch);
 
     if (child != null) {
-      String radix = longestCommonPrefix(child.getRadix(), key);
-
-      if (radix.length() == child.getRadix().length()) {
-        if (radix.length() == key.length()) { // got it
+      if (key.startsWith(child.getRadix())) {
+        if (child.getRadix().length() == key.length()) { // got it
           return child;
         }
         else { // child is actually a prefix of the key we are looking for
-          return radixTreeGet(child, key.substring(radix.length()));
+          return radixTreeGet(child, key.substring(child.getRadix().length()));
         }
       }
     }
@@ -50,51 +48,44 @@ public class Solution {
     return null;
   }
 
-  protected static <T> void radixTreeMove(TrieNode<T> node, TrieNode<T> parent) {
+  protected static <T> void radixTreeMove(TrieNode<T> node, TrieNode<T> parent, TrieNodeFactory<T> factory) {
     if (parent.getChild(node.getChar()) == null) {
       parent.addChild(node.getChar(), node);
     }
     else {
-      Iterator<Map.Entry<Character, TrieNode<T>>> it = node.treeMap.entrySet().iterator();
-      TrieNode<T> childParent = radixTreeSet(parent, node.getRadix(), node.getValue());
-      while (it.hasNext()) {
-        Map.Entry<Character, TrieNode<T>> e = it.next();
-        TrieNode<T> current = e.getValue();
+      TrieNode<T> childParent = radixTreeSet(parent, node.getRadix(), node.getValue(), factory);
 
-        Iterator<Map.Entry<Character, TrieNode<T>>> it1 = current.treeMap.entrySet().iterator();
-        current = radixTreeSet(childParent, current.getRadix(), current.getValue());
+      for (int i = 0; i < node.children.length; i++ ) {
+        if (node.children[i] != null) {
+          TrieNode<T> current =
+              radixTreeSet(childParent, node.children[i].getRadix(), node.children[i].getValue(), factory);
 
-        while (it1.hasNext()) {
-          TrieNode<T> child = it1.next().getValue();
-          radixTreeMove(child, current);
+          for (int j = 0; j > current.children.length; j++ ) {
+            if (current.children[i] != null) {
+              radixTreeMove(current.children[i], current, factory);
+            }
+          }
         }
       }
     }
   }
 
-  protected static <T> void radixTreeRemove(TrieNode<T> node, String key) {
+  protected static <T> void radixTreeRemove(TrieNode<T> node, String key, TrieNodePool<T> factory) {
     Character ch = key.charAt(0);
     TrieNode<T> child = node.getChild(ch);
 
     if (child != null) {
-      String radix = longestCommonPrefix(child.getRadix(), key);
-
-      if (radix.length() == child.getRadix().length()) {
-        if (radix.length() == key.length()) { // got it
+      if (key.startsWith(child.getRadix())) {
+        if (key.length() == child.getRadix().length()) { // got it
           node.removeChild(ch);
 
           if (child.childrenNumber() == 0) {
             if (node.childrenNumber() == 1 && node.getValue() == null && node.getRadix() != null) {
               TrieNode<T> onlyChild = node.getFirstChild();
               node.setValue(onlyChild.getValue());
-              node.arr = onlyChild.arr;
-              node.treeMap = onlyChild.treeMap;
+              System.arraycopy(onlyChild.children, 0, node.children, 0, onlyChild.children.length);
               node.radix += onlyChild.radix;
               node.ch = node.radix.charAt(0);
-              onlyChild.setValue(null);
-              onlyChild.treeMap = null;
-              onlyChild.ch = null;
-              onlyChild.radix = null;
             }
           }
           else if (child.childrenNumber() == 1) {
@@ -105,67 +96,60 @@ public class Solution {
             node.addChild(childOfChild.ch, childOfChild);
           }
           else {
-            Iterator<Map.Entry<Character, Solution.TrieNode<T>>> it = child.treeMap.entrySet().iterator();
-
-            while (it.hasNext()) {
-              Solution.TrieNode<T> toMove = it.next().getValue();
-              toMove.ch = ch;
-              toMove.radix = ch + toMove.radix;
-              radixTreeMove(toMove, node);
+            for (int i = 0; i < child.children.length; i++ ) {
+              if (child.children[i] != null) {
+                Solution.TrieNode<T> toMove = child.children[i];
+                toMove.ch = ch;
+                toMove.radix = ch + toMove.radix;
+                radixTreeMove(toMove, node, factory);
+              }
             }
-
-            child.treeMap = null;
           }
 
-          child.setValue(null);
+          factory.markAvailable(child);
         }
         else { // child is actually a prefix of the key we are adding
-          radixTreeRemove(child, key.substring(radix.length()));
+          String radix = longestCommonPrefix(child.getRadix(), key);
+          radixTreeRemove(child, key.substring(radix.length()), factory);
         }
       }
     }
   }
 
-  protected static <T> TrieNode<T> radixTreeSet(TrieNode<T> node, String key, T value) {
+  protected static <T> TrieNode<T> radixTreeSet(TrieNode<T> node, String key, T value,
+      TrieNodeFactory<T> factory) {
     Character ch = key.charAt(0);
     TrieNode<T> child = node.getChild(ch);
 
     if (child == null) {
-      child = new TrieNode<T>(ch, key);
+      child = factory.getTrieNode();
+      child.ch = ch;
+      child.radix = key;
       child.setValue(value);
       node.addChild(ch, child);
     }
     else {
-
-      String radix = longestCommonPrefix(child.getRadix(), key);
-
-      if (radix.length() == child.getRadix().length()) {
-        if (radix.length() == key.length()) { // updating existing key
+      if (key.startsWith(child.getRadix())) {
+        if (child.getRadix().length() == key.length()) { // updating existing key
           child.setValue(value);
           return child;
         }
         else { // child is actually a prefix of the key we are adding
-          return radixTreeSet(child, key.substring(radix.length()), value);
+          return radixTreeSet(child, key.substring(child.getRadix().length()), value, factory);
         }
       }
-      else if (radix.length() < child.getRadix().length()) {
-        if (radix.length() == key.length()) { // key we're looking for is a prefix of child
-          TrieNode<T> split = new TrieNode<>(ch, radix);
-          split.setValue(value);
+      else {
+        String radix = longestCommonPrefix(child.getRadix(), key);
+        if (radix.length() < key.length()) {
+          TrieNode<T> split = factory.getTrieNode();
+          split.ch = ch;
+          split.radix = radix;
           node.removeChild(ch);
           node.addChild(ch, split);
           child.radix = child.radix.substring(radix.length());
           child.ch = child.radix.charAt(0);
           split.addChild(child.ch, child);
-        }
-        else if (radix.length() < key.length()) {
-          TrieNode<T> split = new TrieNode<>(ch, radix);
-          node.removeChild(ch);
-          node.addChild(ch, split);
-          child.radix = child.radix.substring(radix.length());
-          child.ch = child.radix.charAt(0);
-          split.addChild(child.ch, child);
-          return radixTreeSet(split, key.substring(radix.length()), value);
+          return radixTreeSet(split, key.substring(radix.length()), value, factory);
         }
       }
 
@@ -174,7 +158,7 @@ public class Solution {
     return child;
   }
 
-  protected static <T> void radixTreeTraversal(TrieNode<T> root, RadixTreeVisitor<T> visitor) {
+  protected static <T> void radixTreeTraversal(TrieNode<T> root, RadixTreeVisitor<T> argVisitor) {
     TrieNode<T> node = root;
 
     traversalStack.clear();
@@ -182,14 +166,13 @@ public class Solution {
     while (!traversalStack.isEmpty() || node != null) {
       if (node != null) {
         if (node.getValue() != null) {
-          visitor.visit(node);
+          argVisitor.visit(node);
         }
 
-        Iterator<Map.Entry<Character, Solution.TrieNode<T>>> it =
-            node.treeMap.descendingMap().entrySet().iterator();
-        while (it.hasNext()) {
-          Map.Entry<Character, Solution.TrieNode<T>> entry = it.next();
-          traversalStack.push(entry.getValue());
+        for (int i = 0; i < node.children.length; i++ ) {
+          if (node.children[i] != null) {
+            traversalStack.push(node.children[i]);
+          }
         }
 
         if (!traversalStack.isEmpty()) {
@@ -266,8 +249,8 @@ public class Solution {
   public static class TrieNode<V> {
     protected Character ch;
     protected String radix;
-    protected TrieNode<V>[] arr = new TrieNode[96];
-    protected TreeMap<Character, TrieNode<V>> treeMap = new TreeMap<>();
+    protected TrieNode<V>[] children = new TrieNode[96];
+    protected int count;
 
     private V value;
 
@@ -289,12 +272,19 @@ public class Solution {
     }
 
     public void addChild(Character argCh, TrieNode<V> argNode) {
-      arr[argCh - 32] = argNode;
-      treeMap.put(argCh, argNode);
+      children[argCh - 32] = argNode;
+      count++ ;
     }
 
     public int childrenNumber() {
-      return treeMap.size();
+      return count;
+    }
+
+    public void clear() {
+      radix = null;
+      ch = null;
+      children = new TrieNode[96];
+      value = null;
     }
 
     public Character getChar() {
@@ -302,12 +292,16 @@ public class Solution {
     }
 
     public TrieNode<V> getChild(Character argCh) {
-      return arr[argCh - 32];
+      return children[argCh - 32];
     }
 
     public TrieNode<V> getFirstChild() {
-      Iterator<Map.Entry<Character, TrieNode<V>>> it = treeMap.entrySet().iterator();
-      return it.hasNext() ? it.next().getValue() : null;
+      for (int i = 0; i < 96; i++ ) {
+        if (children[i] != null) {
+          return children[i];
+        }
+      }
+      return null;
     }
 
     public String getRadix() {
@@ -319,8 +313,8 @@ public class Solution {
     }
 
     public void removeChild(Character argCh) {
-      arr[argCh - 32] = null;
-      treeMap.remove(argCh);
+      children[argCh - 32] = null;
+      count-- ;
     }
 
     public void setValue(V argValue) {
@@ -333,6 +327,12 @@ public class Solution {
       return value != null ? value.toString() : "";
     }
 
+  }
+
+  public static interface TrieNodeFactory<V> {
+    public TrieNode<V> getTrieNode();
+
+    public void markAvailable(TrieNode<V> node);
   }
 
   protected static interface RadixTreeVisitor<T> {
@@ -361,10 +361,11 @@ public class Solution {
     private Entry<K, V> tail;
 
     private int bound;
-
     private int size;
 
-    private TrieNode<Entry<K, V>> root = new TrieNode<>();
+    private LRUEntryPool<K, V> lruEntryPool = new LRUEntryPool<>();
+    private TrieNodePool<Entry<K, V>> trieNodePool = new TrieNodePool<>();
+    private TrieNode<Entry<K, V>> root = trieNodePool.getTrieNode();
 
     public LRUCache() {
       bound = 100;
@@ -421,11 +422,11 @@ public class Solution {
           }
 
           if (head == null) {
-            head = new Entry<>(k, v);
+            head = lruEntryPool.getEntry(k, v);
             tail = head;
           }
           else {
-            head.prev = new Entry<>(k, v);
+            head.prev = lruEntryPool.getEntry(k, v);
             head.prev.next = head;
             head = head.prev;
           }
@@ -479,6 +480,7 @@ public class Solution {
       }
 
       trieRemove(oldTail.key.toString());
+      lruEntryPool.markAvailable(oldTail);
     }
 
     private Entry<K, V> trieGet(String word) {
@@ -487,12 +489,61 @@ public class Solution {
     }
 
     private void trieRemove(String word) {
-      radixTreeRemove(root, word);
+      radixTreeRemove(root, word, trieNodePool);
     }
 
     private Entry<K, V> trieSet(String word, Entry<K, V> entry) {
-      TrieNode<Entry<K, V>> node = radixTreeSet(root, word, entry);
+      TrieNode<Entry<K, V>> node = radixTreeSet(root, word, entry, trieNodePool);
       return node != null ? node.getValue() : null;
+    }
+  }
+
+  private static class LRUEntryPool<K, V> {
+    private Entry<K, V>[] availableEntries = new Entry[350];
+    private int count = 0;
+
+    public Entry<K, V> getEntry(K key, V value) {
+      if (count == 0) {
+        return new Entry<K, V>(key, value);
+      }
+      else {
+        Entry<K, V> entry = availableEntries[count - 1];
+        entry.key = key;
+        entry.value = value;
+        availableEntries[ --count] = null;
+        return entry;
+      }
+    }
+
+    public void markAvailable(Entry<K, V> entry) {
+      entry.key = null;
+      entry.value = null;
+      availableEntries[count++ ] = entry;
+    }
+  }
+
+  private static class TrieNodePool<V>
+      implements TrieNodeFactory<V> {
+
+    private TrieNode<V>[] availableNodes = new TrieNode[350];
+    private int count = 0;
+
+    @Override
+    public TrieNode<V> getTrieNode() {
+      if (count == 0) {
+        return new TrieNode<>();
+      }
+      else {
+        TrieNode<V> node = availableNodes[count - 1];
+        availableNodes[ --count] = null;
+        return node;
+      }
+    }
+
+    @Override
+    public void markAvailable(TrieNode<V> node) {
+      node.clear();
+      availableNodes[count++ ] = node;
     }
   }
 }
